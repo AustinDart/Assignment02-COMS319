@@ -16,10 +16,21 @@ function get_search_bar() {
   return x.value;
 }
 
-function render_products(ProductsCategory, searchBar, setSearchBar) {
+function update_cart(Cart, setCart, PageId, product, setPageId)
+{
+  let x = Cart;
+  let y = PageId;
+  x.push(product.id);
+  setCart(x);
+  // This forces an update (for some reason, setCart is only sometimes re-rendering)
+  setPageId(0);
+  setPageId(y);
+}
+
+function render_products(ProductsCategory, searchBar, setSearchBar, Cart, setCart, PageId, setPageId) {
   return (
     <div className="category-section fixed">
-      <div class="topnav">
+      <div className="topnav">
         <input onChange={() => setSearchBar(get_search_bar())}
           type="text" placeholder="Search.." id="SearchBar" style={{ border: "solid", color: "black",  width: "75%"}}></input>
       </div>
@@ -34,7 +45,7 @@ function render_products(ProductsCategory, searchBar, setSearchBar) {
         {ProductsCategory
           .filter(product => product.title.toLowerCase().includes(searchBar.toLowerCase()))
           .map((product, index) => (
-            <div key={index} className="group relative shadow-lg">
+            <div key={index} className="group relative shadow-lg" onClick={() => update_cart(Cart, setCart, PageId, product, setPageId)}>
               <div className=" min-h-80 bg-gray-200 aspect-w-1 aspect-h-1 rounded-md overflow-hidden group-hover:opacity-75 lg:h-60 lg:aspect-none">
                 <img
                   alt="Product Image"
@@ -56,6 +67,7 @@ function render_products(ProductsCategory, searchBar, setSearchBar) {
                   <p className="mt-1 text-sm text-gray-500">
                     Rating: {product.rating.rate}
                   </p>
+                  <button className="inline-block bg-amber-600 rounded-full px-3 py-1">Add To Cart</button>
                 </div>
                 <p className="text-sm font-medium text-green-600">
                   ${product.price}
@@ -72,18 +84,12 @@ const render_cart = () => {
   return "This is your cart";
 };
 
-const render = (ProductsCategory, PageId, SearchBar, setSearchBar) => {
+const render = (ProductsCategory, PageId, SearchBar, setSearchBar, Cart, setCart, setPageId) => {
   if (PageId == 1) {
-    return render_products(ProductsCategory, SearchBar, setSearchBar);
+    console.log("Cart: " + Cart);
+    return render_products(ProductsCategory, SearchBar, setSearchBar, Cart, setCart, PageId, setPageId);
   } else if (PageId == 2) {
-    return (
-      <div className="category-section fixed">
-        <h2 className="text-3xl font-extrabold tracking-tight text-gray-600 category-title">
-          Your Cart
-        </h2>
-        <p>Empty</p>
-      </div>
-    );
+    return render_cart();
   }
 };
 
@@ -91,6 +97,8 @@ const App = () => {
   const [PageId, setPageId] = useState(1);
   const [SearchBar, setSearchBar] = useState("");
   const [ProductsCategory, setProductsCategory] = useState(Products);
+  const [Cart, setCart] = useState([]);
+
   return (
     <div className="flex fixed flex-row" id="all_page">
       <div
@@ -130,7 +138,7 @@ const App = () => {
           Products.length,
           ProductsCategory.length
         )}
-        {render(ProductsCategory, PageId, SearchBar, setSearchBar)}
+        {render(ProductsCategory, PageId, SearchBar, setSearchBar, Cart, setCart, setPageId)}
       </div>
     </div>
   );
