@@ -6,9 +6,23 @@ import { Categories } from "./Categories";
 
 const cartArray = [];
 
-const render_products = (ProductsCategory) => {
+function get_search_bar() {
+  let x = document.getElementById("SearchBar");
+  if (x == null) {
+    console.log("Test");
+    return "";
+  }
+  console.log(x.value);
+  return x.value;
+}
+
+function render_products(ProductsCategory, searchBar, setSearchBar) {
   return (
     <div className="category-section fixed">
+      <div class="topnav">
+        <input onChange={() => setSearchBar(get_search_bar())}
+          type="text" placeholder="Search.." id="SearchBar" style={{ border: "solid", color: "black",  width: "75%"}}></input>
+      </div>
       <h2 className="text-3xl font-extrabold tracking-tight text-gray-600 category-title">
         Products ({ProductsCategory.length})
       </h2>
@@ -17,36 +31,38 @@ const render_products = (ProductsCategory) => {
         style={{ maxHeight: "800px", overflowY: "scroll" }}
       >
         {/* Loop Products */}
-        {ProductsCategory.map((product, index) => (
-          <div key={index} className="group relative shadow-lg">
-            <div className=" min-h-80 bg-gray-200 aspect-w-1 aspect-h-1 rounded-md overflow-hidden group-hover:opacity-75 lg:h-60 lg:aspect-none">
-              <img
-                alt="Product Image"
-                src={product.image}
-                className="w-full h-full object-center object-cover lg:w-full lg:h-full"
-              />
-            </div>
-            <div className="flex justify-between p-3">
-              <div>
-                <h3 className="text-sm text-gray-700">
-                  <a href={product.href}>
-                    <span aria-hidden="true" className="absolute inset-0" />
-                    <span style={{ fontSize: "16px", fontWeight: "600" }}>
-                      {product.title}
-                    </span>
-                  </a>
-                  <p>Tag - {product.category}</p>
-                </h3>
-                <p className="mt-1 text-sm text-gray-500">
-                  Rating: {product.rating.rate}
+        {ProductsCategory
+          .filter(product => product.title.toLowerCase().includes(searchBar.toLowerCase()))
+          .map((product, index) => (
+            <div key={index} className="group relative shadow-lg">
+              <div className=" min-h-80 bg-gray-200 aspect-w-1 aspect-h-1 rounded-md overflow-hidden group-hover:opacity-75 lg:h-60 lg:aspect-none">
+                <img
+                  alt="Product Image"
+                  src={product.image}
+                  className="w-full h-full object-center object-cover lg:w-full lg:h-full"
+                />
+              </div>
+              <div className="flex justify-between p-3">
+                <div>
+                  <h3 className="text-sm text-gray-700">
+                    <a href={product.href}>
+                      <span aria-hidden="true" className="absolute inset-0" />
+                      <span style={{ fontSize: "16px", fontWeight: "600" }}>
+                        {product.title}
+                      </span>
+                    </a>
+                    <p>Tag - {product.category}</p>
+                  </h3>
+                  <p className="mt-1 text-sm text-gray-500">
+                    Rating: {product.rating.rate}
+                  </p>
+                </div>
+                <p className="text-sm font-medium text-green-600">
+                  ${product.price}
                 </p>
               </div>
-              <p className="text-sm font-medium text-green-600">
-                ${product.price}
-              </p>
             </div>
-          </div>
-        ))}
+          ))}
       </div>
     </div>
   );
@@ -56,9 +72,9 @@ const render_cart = () => {
   return "This is your cart";
 };
 
-const render = (ProductsCategory, PageId) => {
+const render = (ProductsCategory, PageId, SearchBar, setSearchBar) => {
   if (PageId == 1) {
-    return render_products(ProductsCategory);
+    return render_products(ProductsCategory, SearchBar, setSearchBar);
   } else if (PageId == 2) {
     return (
       <div className="category-section fixed">
@@ -73,10 +89,10 @@ const render = (ProductsCategory, PageId) => {
 
 const App = () => {
   const [PageId, setPageId] = useState(1);
+  const [SearchBar, setSearchBar] = useState("");
   const [ProductsCategory, setProductsCategory] = useState(Products);
-
   return (
-    <div className="flex fixed flex-row">
+    <div className="flex fixed flex-row" id="all_page">
       <div
         className="h-screen bg-slate-800 p-3 xl:basis-1/5"
         style={{ minWidth: "65%" }}
@@ -114,7 +130,7 @@ const App = () => {
           Products.length,
           ProductsCategory.length
         )}
-        {render(ProductsCategory, PageId)}
+        {render(ProductsCategory, PageId, SearchBar, setSearchBar)}
       </div>
     </div>
   );
