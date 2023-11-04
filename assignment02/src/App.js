@@ -18,9 +18,10 @@ function get_search_bar() {
 
 function update_cart(Cart, setCart, PageId, product, setPageId)
 {
+  console.log("Adding " + product.id + " to cart");
   let x = Cart;
   let y = PageId;
-  x.push(product.id);
+  x.push(product);
   setCart(x);
   // This forces an update (for some reason, setCart is only sometimes re-rendering)
   setPageId(0);
@@ -80,16 +81,31 @@ function render_products(ProductsCategory, searchBar, setSearchBar, Cart, setCar
   );
 };
 
-const render_cart = () => {
-  return "This is your cart";
+
+
+const render_cart = (Cart) => {
+  const x = Cart;
+  var index = 1;
+  return (
+    <div className="category-section fixed">
+      <h2 className="text-3xl font-extrabold tracking-tight text-gray-600 category-title">
+        Your Cart ({Cart.length} Items)
+      </h2>
+      {x.map((product) => (
+        <div key={index++}>
+          <p>{product.title}</p>
+          <button className="inline-block bg-amber-600 rounded-full px-3 py-1">Remove</button><br></br><br></br>
+        </div>
+      ))}
+    </div>
+  )
 };
 
 const render = (ProductsCategory, PageId, SearchBar, setSearchBar, Cart, setCart, setPageId) => {
   if (PageId == 1) {
-    console.log("Cart: " + Cart);
     return render_products(ProductsCategory, SearchBar, setSearchBar, Cart, setCart, PageId, setPageId);
   } else if (PageId == 2) {
-    return render_cart();
+    return render_cart(Cart);
   }
 };
 
