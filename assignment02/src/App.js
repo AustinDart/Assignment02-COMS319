@@ -1,7 +1,7 @@
 import "./App.css";
 import logo from "./logo.png";
 import React, { useState } from "react";
-import { Products } from "./Products";
+import Products from "./Products.json";
 import { Categories } from "./Categories";
 
 const cartArray = [];
