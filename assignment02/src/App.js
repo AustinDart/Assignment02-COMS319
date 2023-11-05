@@ -123,6 +123,25 @@ const sum_prices = (Cart) =>
   return sum;
 }
 
+function count_number_of_products(cart){
+  let cart_return = [];
+  for(let i = 0; i < cart.length; i++){
+    let found = false;
+    for(let j = 0; j < cart_return.length; j++){
+      if(cart[i].title == cart_return[j].title){
+        cart_return[j].number_of_products++;
+        found = true;
+        break;
+      }
+    }
+    if(!found){
+      cart[i].number_of_products = 1;
+      cart_return.push(cart[i]);
+    }
+  }
+  return cart_return;
+}
+
 function render_user_login(setState) {
   return (
     <section style={{ position: "fixed", marginLeft: "10%", width: "50%" }}>
@@ -221,14 +240,15 @@ function render_user_information(bought_items,set_bought_items,PageId,setPageId)
 }
 
 const render_bought_items = (bought_items,set_bought_items,PageId,setPageId) => {
+  let products = count_number_of_products(bought_items);
   return (
     <div className="category-section fixed">
       <h2 className="text-3xl font-extrabold tracking-tight text-gray-600 category-title">
         Previously Bought Items: ({bought_items.length} Items)
       </h2>
-      {bought_items.map((item, index) => (
+      {products.map((item, index) => (
         <div key={index+1} id={"div_" + index}>
-          <p>{index+1} - {item.title}</p>
+          <p>{item.number_of_products}x - {item.title}</p>
         </div>
       ))}
     </div>
@@ -251,7 +271,7 @@ const render_cart = (Cart, setCart, PageId, setPageId,bought_items,set_bought_it
       <p>Total Price: ${sum_prices(Cart)}</p>
 
       {/* Feel Free to Style this however you want, I just have it here so I can have functionality for the "User Information" page */}
-      <button onClick={() => buy_items(Cart,setCart,bought_items,set_bought_items)}>Buy</button>
+      <button onClick={() => buy_items(Cart,setCart,bought_items,set_bought_items)} type="submit" className="inline-block bg-amber-600 rounded-full px-3 py-1">Buy</button>
 
     </div>
   )
@@ -272,6 +292,11 @@ const render = (ProductsCategory, PageId, SearchBar, setSearchBar, Cart, setCart
 };
 
 function buy_items(Cart,setCart,bought_items,set_bought_items){
+  if(!is_logged_in){
+    alert("You must log in before Buying items");
+    return;
+  }
+  alert(`You have successfuly bought ${Cart.length} items with your card ending in ${get_last_four(login_info.CreditCard)}`);
   for(let i = 0; i < Cart.length; i++){
     bought_items.push(Cart[i]);
   }
