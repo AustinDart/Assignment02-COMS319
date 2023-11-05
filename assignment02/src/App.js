@@ -28,6 +28,16 @@ function update_cart(Cart, setCart, PageId, product, setPageId)
   setPageId(y);
 }
 
+function removeFromCart(Cart, setCart, index, PageId, setPageId)
+{
+  console.log("Removing idx " + index + " from cart");
+  let x = Cart;
+  let y = PageId;
+  x.splice(index, 1);
+  //document.getElementById("div_" + index).innerHTML = "";
+  setCart(x);
+}
+
 function render_products(ProductsCategory, searchBar, setSearchBar, Cart, setCart, PageId, setPageId) {
   return (
     <div className="category-section fixed">
@@ -83,20 +93,19 @@ function render_products(ProductsCategory, searchBar, setSearchBar, Cart, setCar
 
 
 
-const render_cart = (Cart) => {
-  const x = Cart;
-  var index = 1;
+const render_cart = (Cart, setCart, PageId, setPageId) => {
   return (
     <div className="category-section fixed">
       <h2 className="text-3xl font-extrabold tracking-tight text-gray-600 category-title">
         Your Cart ({Cart.length} Items)
       </h2>
-      {x.map((product) => (
-        <div key={index++}>
-          <p>{product.title}</p>
-          <button className="inline-block bg-amber-600 rounded-full px-3 py-1">Remove</button><br></br><br></br>
+      {Cart.map((item, index) => (
+        <div key={index+1} id={"div_" + index}>
+          <p>{index+1} - {item.title}</p>
+          <button onClick={() => removeFromCart(Cart, setCart, index, PageId, setPageId)} className="inline-block bg-amber-600 rounded-full px-3 py-1">Remove</button><br></br><br></br>
         </div>
       ))}
+
     </div>
   )
 };
@@ -105,7 +114,7 @@ const render = (ProductsCategory, PageId, SearchBar, setSearchBar, Cart, setCart
   if (PageId == 1) {
     return render_products(ProductsCategory, SearchBar, setSearchBar, Cart, setCart, PageId, setPageId);
   } else if (PageId == 2) {
-    return render_cart(Cart);
+    return render_cart(Cart, setCart, PageId, setPageId);
   }
 };
 
