@@ -23,9 +23,6 @@ function update_cart(Cart, setCart, PageId, product, setPageId)
   let y = PageId;
   x.push(product);
   setCart(x);
-  // This forces an update (for some reason, setCart is only sometimes re-rendering)
-  setPageId(0);
-  setPageId(y);
 }
 
 function removeFromCart(Cart, setCart, index, PageId, setPageId)
@@ -98,6 +95,15 @@ function render_products(ProductsCategory, searchBar, setSearchBar, Cart, setCar
   );
 };
 
+const sum_prices = (Cart) =>
+{
+  var sum = 0;
+  Cart.forEach(product => {
+    sum += product.price;
+  })
+
+  return sum;
+}
 
 
 const render_cart = (Cart, setCart, PageId, setPageId) => {
@@ -108,10 +114,12 @@ const render_cart = (Cart, setCart, PageId, setPageId) => {
       </h2>
       {Cart.map((item, index) => (
         <div key={index+1} id={"div_" + index}>
-          <p>{index+1} - {item.title}</p>
+          <p>{index+1} - ${item.price} - {item.title}</p>
           <button onClick={() => removeFromCart(Cart, setCart, index, PageId, setPageId)} className="inline-block bg-amber-600 rounded-full px-3 py-1">Remove</button><br></br><br></br>
         </div>
       ))}
+
+      <p>Total Price: ${sum_prices(Cart)}</p>
 
     </div>
   )
