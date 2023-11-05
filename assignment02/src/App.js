@@ -188,7 +188,7 @@ function render_user_login(setState) {
 function get_last_four(card_num) {
   return card_num.substring(card_num.length - 4);
 }
-function render_user_information() {
+function render_user_information(bought_items,set_bought_items,PageId,setPageId) {
   return (
       <div>
         <p>
@@ -198,13 +198,29 @@ function render_user_information() {
           Address: {login_info.Address}, {login_info.State} {login_info.City}, {login_info.Zip}
         </p>
         <p>
-          Credit Card: {login_info.NameOnCard}: Card Ending in {get_last_four(login_info.CreditCard)}
+          Credit Card: {login_info.NameOnCard}: Card<br></br> Ending in {get_last_four(login_info.CreditCard)}
         </p>
+        {render_bought_items(bought_items,set_bought_items,PageId,setPageId)}
       </div>
   )
 }
 
-const render_cart = (Cart, setCart, PageId, setPageId) => {
+const render_bought_items = (bought_items,set_bought_items,PageId,setPageId) => {
+  return (
+    <div className="category-section fixed">
+      <h2 className="text-3xl font-extrabold tracking-tight text-gray-600 category-title">
+        Previously Bought Items: ({bought_items.length} Items)
+      </h2>
+      {bought_items.map((item, index) => (
+        <div key={index+1} id={"div_" + index}>
+          <p>{index+1} - {item.title}</p>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+const render_cart = (Cart, setCart, PageId, setPageId,bought_items,set_bought_items) => {
   return (
     <div className="category-section fixed">
       <h2 className="text-3xl font-extrabold tracking-tight text-gray-600 category-title">
@@ -219,24 +235,33 @@ const render_cart = (Cart, setCart, PageId, setPageId) => {
 
       <p>Total Price: ${sum_prices(Cart)}</p>
 
+      {/* Feel Free to Style this however you want, I just have it here so I can have functionality for the "User Information" page */}
+      <button onClick={() => buy_items(Cart,setCart,bought_items,set_bought_items)}>Buy</button>
+
     </div>
   )
 };
 
-const render = (ProductsCategory, PageId, SearchBar, setSearchBar, Cart, setCart, setPageId) => {
+const render = (ProductsCategory, PageId, SearchBar, setSearchBar, Cart, setCart, setPageId,bought_items,set_bought_items) => {
   if (PageId == 1) {
     return render_products(ProductsCategory, SearchBar, setSearchBar, Cart, setCart, PageId, setPageId);
   } else if (PageId == 2 || PageId == 3) {
-    return render_cart(Cart, setCart, PageId, setPageId);
+    return render_cart(Cart, setCart, PageId, setPageId,bought_items,set_bought_items);
   }
   else if (PageId == 4) {
     return render_user_login(setPageId);
   }
   else if (PageId == 5) {
-    return render_user_information();
+    return render_user_information(bought_items,set_bought_items,PageId,setPageId);
   }
 };
 
+function buy_items(Cart,setCart,bought_items,set_bought_items){
+  for(let i = 0; i < Cart.length; i++){
+    bought_items.push(Cart[i]);
+  }
+  setCart([]);
+}
 
 //For Testing Purposes, remove before turning in
 function testLogin(setPageId) {
@@ -260,6 +285,7 @@ const App = () => {
   const [SearchBar, setSearchBar] = useState("");
   const [ProductsCategory, setProductsCategory] = useState(Products);
   const [Cart, setCart] = useState([]);
+  const [bought_items,set_bought_items] = useState([]);
 
   let login_buttons;
   if (is_logged_in) {
@@ -340,7 +366,7 @@ const App = () => {
           Products.length,
           ProductsCategory.length
         )}
-        {render(ProductsCategory, PageId, SearchBar, setSearchBar, Cart, setCart, setPageId)}
+        {render(ProductsCategory, PageId, SearchBar, setSearchBar, Cart, setCart, setPageId,bought_items,set_bought_items)}
       </div>
     </div>
   );
