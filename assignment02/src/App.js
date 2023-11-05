@@ -34,8 +34,15 @@ function removeFromCart(Cart, setCart, index, PageId, setPageId)
   let x = Cart;
   let y = PageId;
   x.splice(index, 1);
-  //document.getElementById("div_" + index).innerHTML = "";
   setCart(x);
+  if(y == 2)
+  {
+    setPageId(3);
+  }
+  else
+  {
+    setPageId(2);
+  }
 }
 
 function render_products(ProductsCategory, searchBar, setSearchBar, Cart, setCart, PageId, setPageId) {
@@ -113,7 +120,7 @@ const render_cart = (Cart, setCart, PageId, setPageId) => {
 const render = (ProductsCategory, PageId, SearchBar, setSearchBar, Cart, setCart, setPageId) => {
   if (PageId == 1) {
     return render_products(ProductsCategory, SearchBar, setSearchBar, Cart, setCart, PageId, setPageId);
-  } else if (PageId == 2) {
+  } else if (PageId == 2 || PageId == 3) {
     return render_cart(Cart, setCart, PageId, setPageId);
   }
 };
