@@ -190,16 +190,31 @@ function get_last_four(card_num) {
 }
 function render_user_information(bought_items,set_bought_items,PageId,setPageId) {
   return (
-      <div>
-        <p>
-          Name: {login_info.Name}
-        </p>
-        <p>
-          Address: {login_info.Address}, {login_info.State} {login_info.City}, {login_info.Zip}
-        </p>
-        <p>
-          Credit Card: {login_info.NameOnCard}: Card<br></br> Ending in {get_last_four(login_info.CreditCard)}
-        </p>
+      <div style={{position: "fixed", marginLeft: "10%", width: "50%"}}>
+        <div className="grid grid-cols-8 gap-2">
+          <p style={{textAlign: "right"}} className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            Name:
+          </p>
+          <p className="col-span-6 bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            {login_info.Name}
+          </p>
+        </div>
+        <div className="grid grid-cols-8 gap-2">
+          <p style={{textAlign: "right"}} className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+          Address:
+          </p>
+          <p className="col-span-6 bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            {login_info.Address}, {login_info.State} {login_info.City}, {login_info.Zip}
+          </p>
+        </div>
+        <div className="grid grid-cols-8 gap-2">
+          <p style={{textAlign: "right"}} className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+          Credit Card:
+          </p>
+          <p className="col-span-6 bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            {login_info.NameOnCard}: Card Ending in {get_last_four(login_info.CreditCard)}
+          </p>
+        </div>
         {render_bought_items(bought_items,set_bought_items,PageId,setPageId)}
       </div>
   )
