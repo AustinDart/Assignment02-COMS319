@@ -99,7 +99,7 @@ function login_user(setState) {
     State: document.getElementById("State").value,
     City: document.getElementById("City").value,
     Zip: document.getElementById("Zip").value,
-    CreditCard: document.getElementById("ccn").value,
+    CreditCard: document.getElementById("ccn").value.replace(/\D/g,''),
     ExperationDate: document.getElementById("ExperationDate").value,
     CCV: document.getElementById("CCV").value,
     NameOnCard: document.getElementById("NameOnCard").value,
@@ -185,7 +185,7 @@ function render_user_login(setState) {
                 </div>
                 <div>
                   <label for="CCV" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">CCV</label>
-                  <input type="email" name="CCV" id="CCV" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="***" required=""></input>
+                  <input maxlength="3" type="email" name="CCV" id="CCV" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="***" required=""></input>
                 </div>
                 <div>
                   <label for="NameOnCard" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name on Card</label>
@@ -356,12 +356,12 @@ const App = () => {
           className="inline-block bg-amber-600 rounded-full px-3 py-1"
         >Log In</button>
         <div style={{ marginTop: "-20px" }}>
-          <br></br>
+          {/* <br></br>
           <br></br>
           <button
             onClick={() => testLogin(setPageId)}
             className="inline-block bg-amber-600 rounded-full px-3 py-1"
-          >Test Login</button>
+          >Test Login</button> */}
         </div>
       </div>
     )
