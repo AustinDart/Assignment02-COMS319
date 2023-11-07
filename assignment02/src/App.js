@@ -24,6 +24,12 @@ function update_cart(Cart, setCart, PageId, product, setPageId) {
   let y = PageId;
   x.push(product);
   setCart(x);
+  if (y == 2) {
+    setPageId(3);
+  }
+  else if(y == 3) {
+    setPageId(2);
+  }
 }
 
 function removeFromCart(Cart, setCart, index, PageId, setPageId) {
@@ -255,16 +261,28 @@ const render_bought_items = (bought_items,set_bought_items,PageId,setPageId) => 
   )
 }
 
+function item_to_cart_index(cart, item){
+  for(let i = 0; i < cart.length; i++){
+    if(cart[i].title == item.title)
+    {
+      return i;
+    }
+  }
+  return -1;
+}
+
 const render_cart = (Cart, setCart, PageId, setPageId,bought_items,set_bought_items) => {
+  let products = count_number_of_products(Cart);
   return (
     <div className="category-section fixed">
       <h2 className="text-3xl font-extrabold tracking-tight text-gray-600 category-title">
         Your Cart ({Cart.length} Items)
       </h2>
-      {Cart.map((item, index) => (
-        <div key={index+1} id={"div_" + index}>
-          <p>{index+1} - ${item.price} - {item.title}</p>
-          <button onClick={() => removeFromCart(Cart, setCart, index, PageId, setPageId)} className="inline-block bg-amber-600 rounded-full px-3 py-1">Remove</button><br></br><br></br>
+      {products.map((item, index) => (
+        <div key={index+1} id={"div2_" + index}>
+          <p>{item.number_of_products}x (${item.price} each) - {item.title}</p>
+          <button onClick={() => removeFromCart(Cart, setCart, item_to_cart_index(Cart, item), PageId, setPageId)} className="inline-block bg-amber-600 rounded-full px-3 py-1">-</button>   
+          <button onClick={() => update_cart(Cart, setCart, PageId, item, setPageId)} className="inline-block bg-amber-600 rounded-full px-3 py-1">+</button><br></br><br></br>
         </div>
       ))}
 
