@@ -1,13 +1,12 @@
-import "./App.css";
 import logo from "./logo.png";
 import React, { useState } from "react";
 import Products from "./Products.json";
-import { Categories } from "./Categories";
 
 const cartArray = [];
 let is_logged_in = false;
 let login_info;
 
+// Helper method to get value from search bar
 function get_search_bar() {
   let x = document.getElementById("SearchBar");
   if (x == null) {
@@ -18,6 +17,7 @@ function get_search_bar() {
   return x.value;
 }
 
+// Add a product to cart
 function update_cart(Cart, setCart, PageId, product, setPageId) {
   console.log("Adding " + product.id + " to cart");
   let x = Cart;
@@ -32,6 +32,7 @@ function update_cart(Cart, setCart, PageId, product, setPageId) {
   }
 }
 
+// Remove a product from cart
 function removeFromCart(Cart, setCart, index, PageId, setPageId) {
   console.log("Removing idx " + index + " from cart");
   let x = Cart;
@@ -46,6 +47,7 @@ function removeFromCart(Cart, setCart, index, PageId, setPageId) {
   }
 }
 
+// Render catalog
 function render_products(ProductsCategory, searchBar, setSearchBar, Cart, setCart, PageId, setPageId) {
   return (
     <div className="category-section fixed">
@@ -98,6 +100,8 @@ function render_products(ProductsCategory, searchBar, setSearchBar, Cart, setCar
     </div>
   );
 };
+
+// Login
 function login_user(setState) {
   login_info = {
     Name: document.getElementById("Name").value,
@@ -113,12 +117,15 @@ function login_user(setState) {
   is_logged_in = true;
   setState(1);
 }
+
+// Logout
 function logout_user(setPageId) {
   login_info = null;
   is_logged_in = false;
   setPageId(1);
 }
 
+// Helper to show price of entire cart
 const sum_prices = (Cart) =>
 {
   var sum = 0;
@@ -129,6 +136,7 @@ const sum_prices = (Cart) =>
   return sum;
 }
 
+// Helper to show number of products instead of repetitively showing them
 function count_number_of_products(cart){
   let cart_return = [];
   for(let i = 0; i < cart.length; i++){
@@ -148,6 +156,7 @@ function count_number_of_products(cart){
   return cart_return;
 }
 
+// Render the login page
 function render_user_login(setState) {
   return (
     <section style={{ position: "fixed", marginLeft: "10%", width: "50%" }}>
@@ -210,9 +219,13 @@ function render_user_login(setState) {
     </section>
   )
 }
+
+// Helper for credit card number
 function get_last_four(card_num) {
   return card_num.substring(card_num.length - 4);
 }
+
+// Render user info page
 function render_user_information(bought_items,set_bought_items,PageId,setPageId) {
   return (
       <div style={{position: "fixed", marginLeft: "10%", width: "50%"}}>
@@ -245,6 +258,7 @@ function render_user_information(bought_items,set_bought_items,PageId,setPageId)
   )
 }
 
+// Render the items previously bought
 const render_bought_items = (bought_items,set_bought_items,PageId,setPageId) => {
   let products = count_number_of_products(bought_items);
   return (
@@ -261,6 +275,7 @@ const render_bought_items = (bought_items,set_bought_items,PageId,setPageId) => 
   )
 }
 
+// Helper to get index of an item in the cart
 function item_to_cart_index(cart, item){
   for(let i = 0; i < cart.length; i++){
     if(cart[i].title == item.title)
@@ -271,6 +286,7 @@ function item_to_cart_index(cart, item){
   return -1;
 }
 
+// Render your cart page
 const render_cart = (Cart, setCart, PageId, setPageId,bought_items,set_bought_items) => {
   let products = count_number_of_products(Cart);
   return (
@@ -295,6 +311,7 @@ const render_cart = (Cart, setCart, PageId, setPageId,bought_items,set_bought_it
   )
 };
 
+// Generic render method that figures out which render method to call
 const render = (ProductsCategory, PageId, SearchBar, setSearchBar, Cart, setCart, setPageId,bought_items,set_bought_items) => {
   if (PageId == 1) {
     return render_products(ProductsCategory, SearchBar, setSearchBar, Cart, setCart, PageId, setPageId);
@@ -309,6 +326,7 @@ const render = (ProductsCategory, PageId, SearchBar, setSearchBar, Cart, setCart
   }
 };
 
+// Buy items
 function buy_items(Cart,setCart,bought_items,set_bought_items){
   if(!is_logged_in){
     alert("You must log in before Buying items");
@@ -321,23 +339,7 @@ function buy_items(Cart,setCart,bought_items,set_bought_items){
   setCart([]);
 }
 
-//For Testing Purposes, remove before turning in
-function testLogin(setPageId) {
-  login_info = {
-    Name: "John Doe",
-    Address: "515 Morrill Rd",
-    State: "Iowa",
-    City: "Ames",
-    Zip: "50011",
-    CreditCard: "0000-0000-0000",
-    ExperationDate: "10/31",
-    CCV: "111",
-    NameOnCard: "John Doe",
-  }
-  is_logged_in = true;
-  setPageId(5);
-}
-
+// Main app method. Calls render and some other methods
 const App = () => {
   const [PageId, setPageId] = useState(1);
   const [SearchBar, setSearchBar] = useState("");
@@ -373,14 +375,6 @@ const App = () => {
           onClick={() => setPageId(4)}
           className="inline-block bg-amber-600 rounded-full px-3 py-1"
         >Log In</button>
-        <div style={{ marginTop: "-20px" }}>
-          {/* <br></br>
-          <br></br>
-          <button
-            onClick={() => testLogin(setPageId)}
-            className="inline-block bg-amber-600 rounded-full px-3 py-1"
-          >Test Login</button> */}
-        </div>
       </div>
     )
   }
@@ -419,11 +413,6 @@ const App = () => {
         </div>
       </div>
       <div className="ml-5 p-10 xl:basis-4/5">
-        {console.log(
-          "Before render :",
-          Products.length,
-          ProductsCategory.length
-        )}
         {render(ProductsCategory, PageId, SearchBar, setSearchBar, Cart, setCart, setPageId,bought_items,set_bought_items)}
       </div>
     </div>
